@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Data Acquisition & Extraction</h1>
+  <p class="page-subtitle">Acquire data directly from connected devices or parse offline archives.</p>
+</div>
+
+<div class="card">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="tab-usb">USB Device Acquisition</button>
+    <button class="tab-btn" data-tab="tab-folder">Folder Parsing</button>
+    <button class="tab-btn" data-tab="tab-ab">Backup (.ab) Parsing</button>
+  </div>
+
+  <!-- USB Extraction Tab -->
+  <div id="tab-usb" class="tab-content active">
+    <form id="form-usb-extract">
+      <div class="form-group">
+        <label class="form-label">Output Destination Directory</label>
+        <input type="text" class="form-control" id="usb-out-dir" value="{{ default_dir }}" required>
+      </div>
+      <div class="form-group" style="display: flex; align-items: center; gap: 0.75rem;">
+        <input type="checkbox" id="usb-shared" style="width: 18px; height: 18px;">
+        <label for="usb-shared" style="font-size: 0.95rem; cursor: pointer;">Include Shared Storage (SD Card / Media files)</label>
+      </div>
+      <button type="submit" class="btn btn-success">
+        <span>🚀 Start USB Acquisition</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Folder Parsing Tab -->
+  <div id="tab-folder" class="tab-content">
+    <form id="form-folder-extract">
+      <div class="form-group">
+        <label class="form-label">Source Data Directory</label>
+        <input type="text" class="form-control" id="folder-src-dir" placeholder="/path/to/extracted/data" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Output Destination Directory</label>
+        <input type="text" class="form-control" id="folder-out-dir" value="{{ default_dir }}" required>
+      </div>
+      <button type="submit" class="btn btn-success">
+        <span>📂 Start Folder Parsing</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- AB Backup Tab -->
+  <div id="tab-ab" class="tab-content">
+    <form id="form-ab-extract">
+      <div class="form-group">
+        <label class="form-label">Android Backup (.ab) File Path</label>
+        <input type="text" class="form-control" id="ab-src-file" placeholder="/path/to/backup.ab" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Output Destination Directory</label>
+        <input type="text" class="form-control" id="ab-out-dir" value="{{ default_dir }}" required>
+      </div>
+      <button type="submit" class="btn btn-success">
+        <span>📦 Start AB Parsing</span>
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

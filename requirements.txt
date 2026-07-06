@@ -1,0 +1,14 @@
+dateutils
+javaobj-py3>=0.4.3
+pycryptodomex
+python-dateutil
+XlsxWriter
+Jinja2>=3.0.0
+MarkupSafe>=2.0.1
+wrapt-timeout-decorator>=1.3.10
+appdirs>=1.4.4
+requests
+click>=8.0.0
+rich>=12.0.0
+textual>=0.30.0
+flask>=2.0.0

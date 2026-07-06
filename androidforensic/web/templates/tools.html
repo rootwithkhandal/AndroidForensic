@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Auxiliary Forensic Utilities</h1>
+  <p class="page-subtitle">Tools for Android backup conversion, screen capture, and database decryption.</p>
+</div>
+
+<div class="grid-2">
+  <!-- AB to TAR Converter -->
+  <div class="card">
+    <div class="card-title"><i>📦</i> AB to TAR Archive Converter</div>
+    <form id="form-tool-ab2tar">
+      <div class="form-group">
+        <label class="form-label">Android Backup (.ab) File Path</label>
+        <input type="text" class="form-control" id="tool-ab-input" placeholder="/path/to/backup.ab" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%;">
+        <span>🔄 Convert to TAR Archive</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Screen Capture -->
+  <div class="card">
+    <div class="card-title"><i>📸</i> Device Screen Capture</div>
+    <form id="form-tool-screencap">
+      <div class="form-group">
+        <label class="form-label">Save Destination Directory</label>
+        <input type="text" class="form-control" id="tool-cap-dir" value="{{ default_dir }}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Screenshot Note / Reference</label>
+        <input type="text" class="form-control" id="tool-cap-note" placeholder="e.g., WhatsApp Chat screen">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%;">
+        <span>📸 Capture Screen via ADB</span>
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

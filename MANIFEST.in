@@ -1,0 +1,14 @@
+include README.md
+include requirements.txt
+recursive-include androidforensic/bin *
+recursive-include androidforensic/templates *
+recursive-include androidforensic/web/static *
+recursive-include androidforensic/web/templates *
+recursive-include androidforensic/tui *.tcss
+global-exclude env
+global-exclude .tox
+global-exclude .coverage
+global-exclude htmlcov
+global-exclude __pycache__
+global-exclude .git/
+global-exclude *.py[coxd]

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Preferences & Configuration</h1>
+  <p class="page-subtitle">Manage global paths, reporting templates, and application parameters.</p>
+</div>
+
+<div class="card" style="max-width: 800px;">
+  <form id="form-settings-save">
+    <div class="form-group">
+      <label class="form-label">Default Workspace / Output Directory</label>
+      <input type="text" class="form-control" id="cfg-default-path" value="{{ conf.get('default_path', '') }}">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Time Zone</label>
+      <input type="text" class="form-control" id="cfg-time-zone" value="{{ conf.get('time_zone', 'UTC') }}">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Timestamp Date Format</label>
+      <input type="text" class="form-control" id="cfg-date-format" value="{{ conf.get('date_format', '%Y-%m-%d %H:%M:%S') }}">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Custom Report Header Text</label>
+      <input type="text" class="form-control" id="cfg-custom-header" value="{{ conf.get('custom_header', 'AndroidForensic Everywhere Report') }}">
+    </div>
+    <button type="submit" class="btn btn-success">
+      <span>💾 Save Configuration</span>
+    </button>
+  </form>
+</div>
+{% endblock %}

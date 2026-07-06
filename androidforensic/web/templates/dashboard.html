@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Forensic Acquisition Dashboard</h1>
+  <p class="page-subtitle">Multi-interface suite for Android data extraction, decoding, and analysis.</p>
+</div>
+
+<div class="grid-3">
+  <!-- System Overview Card -->
+  <div class="card">
+    <div class="card-title"><i>ℹ️</i> System Overview</div>
+    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+      AndroidForensic Everywhere provides seamless forensic workflows across CLI, TUI, and responsive Web interfaces.
+    </p>
+    <div style="font-size: 0.85rem; line-height: 1.8;">
+      <div><strong>Version:</strong> <span style="color: var(--accent-color);">{{ version }}</span></div>
+      <div><strong>Engine:</strong> Jinja2 + SQLite Registry</div>
+      <div><strong>Interfaces:</strong> Click CLI, Textual TUI, Flask Web</div>
+    </div>
+  </div>
+
+  <!-- Quick Actions Card -->
+  <div class="card">
+    <div class="card-title"><i>⚡</i> Quick Actions</div>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <a href="{{ url_for('extract_page') }}" class="btn btn-primary" style="width: 100%;">
+        <span>Start USB Acquisition</span>
+      </a>
+      <a href="{{ url_for('crack_page') }}" class="btn btn-warning" style="width: 100%;">
+        <span>Crack Gesture Pattern</span>
+      </a>
+      <a href="{{ url_for('reports_page') }}" class="btn" style="width: 100%; background: rgba(255,255,255,0.05); color: var(--text-primary);">
+        <span>Browse Reports</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Active Capability Card -->
+  <div class="card">
+    <div class="card-title"><i>🛡️</i> Capability Status</div>
+    <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem;">
+      <div style="display: flex; justify-content: space-between;">
+        <span>ADB Server:</span><span style="color: var(--success-color);">Active</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Decoders Registered:</span><span style="color: var(--accent-color);">30+ Modules</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>WhatsApp Crypt:</span><span style="color: var(--success-color);">7 / 8 / 12 Supported</span>
+      </div>
+    </div>
+  </div>
+</div>
+{% block dashboard_extra %}{% endblock %}
+{% endblock %}

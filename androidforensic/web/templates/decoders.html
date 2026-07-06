@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">Registered Artifact Decoders</h1>
+  <p class="page-subtitle">Active decoders available in the system for automated database parsing.</p>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Decoder Name</th>
+          <th>Target Database / File</th>
+          <th>Package Namespace</th>
+          <th>Report Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dec in decoders %}
+        <tr>
+          <td style="font-weight: 600; color: var(--accent-color);">{{ dec.name }}</td>
+          <td><code>{{ dec.target }}</code></td>
+          <td><span style="color: var(--text-secondary);">{{ dec.package }}</span></td>
+          <td>{{ dec.title }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

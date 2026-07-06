@@ -1,0 +1,10 @@
+[tools]
+python = "3.10"
+
+[tasks]
+install = "python -m pip install -e . -r requirements-dev.txt"
+test = "python -m pytest"
+lint = "python -m flake8 androidforensic/"
+gui = "python -m androidforensic.web"
+tui = "python -m androidforensic.tui"
+cli = "python -m androidforensic.cli"

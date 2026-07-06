@@ -1,0 +1,106 @@
+/* AndroidForensic Everywhere Textual TUI Stylesheet */
+
+Screen {
+    background: $surface;
+    color: $text;
+}
+
+#app-grid {
+    layout: grid;
+    grid-size: 2 2;
+    grid-columns: 28 1fr;
+    grid-rows: 1fr 12;
+}
+
+#sidebar {
+    row-span: 2;
+    background: $panel;
+    border-right: solid $primary;
+    padding: 1;
+}
+
+#sidebar-title {
+    content-align: center middle;
+    text-style: bold;
+    color: $accent;
+    height: 3;
+    border-bottom: solid $primary;
+    margin-bottom: 1;
+}
+
+#nav-list {
+    background: transparent;
+    border: none;
+}
+
+#nav-list > ListItem {
+    padding: 1 2;
+}
+
+#nav-list > ListItem.-selected {
+    background: $primary;
+    color: $text;
+    text-style: bold;
+}
+
+#main-content {
+    padding: 1 2;
+    overflow-y: auto;
+}
+
+#console-dock {
+    border-top: solid $secondary;
+    background: $boost;
+    padding: 0 1;
+}
+
+#console-title {
+    text-style: bold;
+    color: $secondary;
+    height: 1;
+}
+
+#console-log {
+    height: 10;
+    overflow-y: scroll;
+}
+
+.panel-card {
+    background: $panel;
+    border: round $primary;
+    padding: 1 2;
+    margin-bottom: 1;
+}
+
+.card-title {
+    text-style: bold;
+    color: $accent;
+    margin-bottom: 1;
+    border-bottom: solid $secondary;
+}
+
+.form-row {
+    height: 3;
+    margin-bottom: 1;
+    layout: horizontal;
+}
+
+.form-label {
+    width: 20;
+    content-align: right middle;
+    padding-right: 1;
+}
+
+.form-input {
+    width: 1fr;
+}
+
+Button.action-btn {
+    margin-top: 1;
+    width: 100%;
+}
+
+DataTable {
+    height: 1fr;
+    border: solid $secondary;
+}
