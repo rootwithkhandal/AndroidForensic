@@ -1,0 +1,47 @@
+# ──────────────────────────────────────────────
+#  Android Forensic Framework – Dependencies
+# ──────────────────────────────────────────────
+
+# ── ADB Interface ────────────────────────────
+adbutils>=2.7.0              # Pythonic ADB client (alternative to subprocess)
+
+# ── GUI ──────────────────────────────────────
+PySide6>=6.7.0               # Qt6 bindings for desktop UI
+
+# ── Database / ORM ───────────────────────────
+SQLAlchemy>=2.0.30           # ORM for evidence database
+apsw>=3.46.0                 # Advanced SQLite wrapper (low-level page access)
+
+# ── Reporting ────────────────────────────────
+Jinja2>=3.1.4                # Template engine for HTML reports
+WeasyPrint>=62.0             # HTML-to-PDF rendering
+openpyxl>=3.1.5              # Excel report generation
+
+# ── Search / Indexing ────────────────────────
+Whoosh>=2.7.4                # Full-text search engine (pure Python)
+
+# ── Hashing / Crypto ────────────────────────
+# hashlib is stdlib — no extra dependency
+# Using pycryptodome for advanced forensic crypto needs
+pycryptodome>=3.20.0         # AES decryption (WhatsApp crypt14/15, etc.)
+
+# ── Media / EXIF ─────────────────────────────
+Pillow>=10.4.0               # Image processing and thumbnail generation
+ExifRead>=3.0.0              # EXIF metadata extraction
+
+# ── Logging ──────────────────────────────────
+loguru>=0.7.2                # Structured logging with rotation
+
+# ── CLI / UX ─────────────────────────────────
+rich>=13.7.0                 # Rich terminal output, progress bars, tables
+click>=8.1.7                 # CLI framework (for the full tool, beyond prototype)
+
+# ── Data Handling ────────────────────────────
+python-dateutil>=2.9.0       # Robust timestamp parsing across formats
+protobuf>=5.27.0             # Parse Android protobuf-encoded data
+
+# ── Packaging ────────────────────────────────
+pyinstaller>=6.8.0           # Build standalone executables
+
+# ── Companion / Web Acquisition ──────────────
+playwright>=1.45.0           # Browser automation for WhatsApp Companion / Web sync extraction

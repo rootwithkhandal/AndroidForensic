@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Forensic Framework │ Helpdesk & CLI Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: rgba(19, 26, 42, 0.7);
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #38bdf8;
+            --accent-indigo: #818cf8;
+            --accent-emerald: #34d399;
+            --accent-rose: #f43f5e;
+            --accent-amber: #fbbf24;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-main);
+            background: var(--bg-glass);
+            border-color: var(--border-glass);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+        }
+
+        /* Header */
+        .page-header {
+            padding: 140px 5% 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+        }
+
+        /* Command Builder Box */
+        .builder-box {
+            max-width: 1000px;
+            margin: 0 auto 60px;
+            padding: 30px;
+            background: #0f1523;
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+        }
+
+        .builder-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--accent-cyan);
+        }
+
+        .flag-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .chip:hover {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--accent-cyan);
+        }
+
+        .chip.active {
+            background: rgba(52, 211, 153, 0.2);
+            border-color: var(--accent-emerald);
+            color: var(--accent-emerald);
+            box-shadow: 0 0 12px rgba(52, 211, 153, 0.2);
+        }
+
+        .preview-box {
+            background: #090c15;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 18px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #0ea5e9, #6366f1);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
+        }
+
+        /* CLI Reference Section */
+        .content-container {
+            max-width: 1000px;
+            margin: 0 auto 100px;
+            padding: 0 5%;
+        }
+
+        .search-bar {
+            width: 100%;
+            background: rgba(19, 26, 42, 0.9);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 16px 24px;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 30px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .cli-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-glass);
+        }
+
+        .cli-table th, .cli-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .cli-table th {
+            background: rgba(11, 15, 25, 0.8);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .cli-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .flag-code {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-emerald);
+            font-weight: 600;
+        }
+
+        /* Troubleshooting Cards */
+        .trouble-section {
+            margin-top: 60px;
+        }
+
+        .trouble-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-left: 4px solid var(--accent-amber);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .trouble-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .trouble-body {
+            color: var(--text-muted);
+            font-size: 0.96rem;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-glass);
+            background: rgba(11, 15, 25, 0.95);
+            padding: 50px 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">
+            <span>🔍</span> Android Forensic Framework
+        </a>
+        <div class="nav-links">
+            <a href="index.html">🏠 Portal</a>
+            <a href="faq.html">❓ FAQ & Guide</a>
+            <a href="help.html" class="active">🛠️ Helpdesk & CLI</a>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>Command Reference & Helpdesk</h1>
+        <p>Interactive command builder, complete CLI flag reference, and rapid ADB troubleshooting solutions.</p>
+    </div>
+
+    <div class="builder-box">
+        <div class="builder-title">⚡ Interactive Command Generator — Click flags to build your extraction command:</div>
+        <div class="flag-chips" id="chipsContainer">
+            <div class="chip active" onclick="toggleChip(this, '--call-logs')">--call-logs</div>
+            <div class="chip active" onclick="toggleChip(this, '--messages')">--messages</div>
+            <div class="chip active" onclick="toggleChip(this, '--contacts')">--contacts</div>
+            <div class="chip active" onclick="toggleChip(this, '--connectivity')">--connectivity</div>
+            <div class="chip active" onclick="toggleChip(this, '--notifications')">--notifications</div>
+            <div class="chip active" onclick="toggleChip(this, '--calendar')">--calendar</div>
+            <div class="chip active" onclick="toggleChip(this, '--journey')">--journey</div>
+            <div class="chip active" onclick="toggleChip(this, '--network')">--network</div>
+            <div class="chip active" onclick="toggleChip(this, '--browser-history')">--browser-history</div>
+            <div class="chip active" onclick="toggleChip(this, '--cookies')">--cookies</div>
+            <div class="chip active" onclick="toggleChip(this, '--device-events')">--device-events</div>
+            <div class="chip active" onclick="toggleChip(this, '--connected-devices')">--connected-devices</div>
+            <div class="chip" onclick="toggleChip(this, '--dry-run')">--dry-run</div>
+            <div class="chip" onclick="toggleChip(this, '--skip-media')">--skip-media</div>
+            <div class="chip" onclick="toggleChip(this, '--skip-apk')">--skip-apk</div>
+        </div>
+        <div class="preview-box">
+            <span id="cmdPreview">python capture/prototype.py --call-logs --messages --contacts --connectivity --notifications --calendar --journey --network --browser-history --cookies --device-events --connected-devices</span>
+            <button class="copy-btn" onclick="copyGenerated()">📋 Copy Command</button>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <input type="text" class="search-bar" placeholder="🔍 Filter CLI flags or descriptions..." onkeyup="filterTable(this)">
+
+        <table class="cli-table" id="cliTable">
+            <thead>
+                <tr>
+                    <th style="width: 250px;">CLI Flag / Option</th>
+                    <th>Forensic Action & Evidence Artifacts Extracted</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="flag-code">--call-logs</span></td>
+                    <td>Acquires incoming, outgoing, missed, and rejected calls (`content://call_log/calls`, `dumpsys calllog`) into SQLite/CSV/JSON (`call_logs.db`).</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--messages</span></td>
+                    <td>Extracts SMS (`content://sms`) and parses WhatsApp Companion (`whatsapp_companion_raw.json`), Telegram, and Signal caches (`messages.db`).</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--contacts</span></td>
+                    <td>Queries system contacts (`content://com.android.contacts/data/phones`) and merges WhatsApp JID profiles (`contacts.db`).</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--connectivity</span></td>
+                    <td>Dumps Wi-Fi state (`dumpsys wifi`), Bluetooth, paired devices, and active socket connections (`connectivity_info.db`).</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--notifications</span></td>
+                    <td>Captures unredacted live and historical system notification queue (`dumpsys notification --noredact`) into `notifications.db`.</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--calendar</span></td>
+                    <td>Extracts user calendar events, locations, and descriptions (`content://com.android.calendar/`) into SQLite and standard `calendar_export.ics`.</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--journey</span></td>
+                    <td>Harvests GPS (`dumpsys location`), EXIF photo coordinates, and builds interactive Leaflet Maps (`journey_map.html`) & Google Earth (`.kml`).</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--network</span></td>
+                    <td>Extracts network interfaces (`ip addr show`), hardware MACs (`wlan0`), live sockets (`ss/netstat`), ARP neighbors, and routing tables (`network_interfaces.db`).</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--browser-history</span></td>
+                    <td>Extracts search queries (`q=...`) and visited URLs across Chrome, Samsung Internet, Firefox, Edge, Brave, and Opera (`browser_visited_urls.db`).</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--cookies</span></td>
+                    <td>Harvests HTTP cookies from browser profile DBs (`Cookies`, `cookies.sqlite`) and Android System WebViews into `cookies_netscape.txt`.</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--device-events</span></td>
+                    <td>Reconstructs minute-by-minute timeline including Screen Lock/Unlock (`KEYGUARD`), app transitions (`usagestats`), and system reboots (`bootstat`).</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--connected-devices</span></td>
+                    <td>Catalogs USB accessories (`dumpsys usb`), Bluetooth gear (`MAC`, `Name`), Wi-Fi P2P peers, Hotspot clients, companion wearables, and cast TVs.</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--output / -o</span></td>
+                    <td>Specifies the custom evidence directory path (defaults to `evidence/CASE-YYYYMMDD-HHMMSS`).</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--dry-run</span></td>
+                    <td>Simulates acquisition over ADB without pulling actual files or saving databases.</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--skip-media</span></td>
+                    <td>Skips pulling DCIM photos, videos, and large media files to accelerate rapid triage.</td>
+                </tr>
+                <tr>
+                    <td><span class="flag-code">--skip-apk</span></td>
+                    <td>Skips extracting third-party APK packages from the device during logical sweep.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="trouble-section">
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 20px; color: var(--accent-cyan);">💡 Rapid Troubleshooting Helpdesk</h2>
+
+            <div class="trouble-card">
+                <div class="trouble-title">⚠️ ADB Device Shows "unauthorized" or "offline"</div>
+                <div class="trouble-body">
+                    When connecting the phone via USB, make sure the phone screen is unlocked. A prompt will appear stating "Allow USB debugging?". Check "Always allow from this computer" and tap **Allow**. If no prompt appears, run `adb kill-server` followed by `adb devices` to re-trigger the RSA authentication prompt.
+                </div>
+            </div>
+
+            <div class="trouble-card">
+                <div class="trouble-title">⚠️ Access Denied when attempting `/data/data/` direct pull</div>
+                <div class="trouble-body">
+                    By design, `/data/data/` is strictly isolated on non-rooted Android OS distributions. If you receive permission errors during raw folder copy, make sure you run our dedicated extraction flags (`--journey`, `--browser-history`, `--cookies`). Our engines automatically utilize Content Providers and system diagnostic services (`dumpsys`) to extract those artifacts without requiring root.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>🛡️ Android Forensic Framework — Built for Verifiable, Court-Ready Mobile Digital Evidence Acquisition.</p>
+        <div class="footer-links">
+            <a href="index.html">Portal Home</a>
+            <a href="faq.html">FAQ & Guide</a>
+            <a href="help.html">Command Reference</a>
+        </div>
+    </footer>
+
+    <script>
+        function toggleChip(el, flag) {
+            el.classList.toggle('active');
+            updateCommand();
+        }
+
+        function updateCommand() {
+            const activeChips = document.querySelectorAll('.chip.active');
+            let flags = [];
+            activeChips.forEach(c => flags.push(c.innerText));
+            const cmdStr = "python capture/prototype.py " + flags.join(' ');
+            document.getElementById('cmdPreview').innerText = cmdStr;
+        }
+
+        function copyGenerated() {
+            const cmd = document.getElementById('cmdPreview').innerText;
+            navigator.clipboard.writeText(cmd).then(() => {
+                const btn = document.querySelector('.preview-box .copy-btn');
+                const orig = btn.innerText;
+                btn.innerText = "✅ Copied!";
+                setTimeout(() => btn.innerText = orig, 2000);
+            });
+        }
+
+        function filterTable(input) {
+            const query = input.value.toLowerCase();
+            const rows = document.querySelectorAll('#cliTable tbody tr');
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? "" : "none";
+            });
+        }
+    </script>
+</body>
+</html>

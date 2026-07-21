@@ -1,0 +1,69 @@
+#:schema https://mise.jdx.dev/schema/mise.toml.json
+
+# ──────────────────────────────────────────────
+#  Android Forensic Framework – mise.toml
+# ──────────────────────────────────────────────
+
+# ── Tool Versions ────────────────────────────
+[tools]
+python = "3.12"
+
+[settings]
+experimental = true
+
+# ── Environment Variables ────────────────────
+[env]
+PYTHONDONTWRITEBYTECODE = "1"
+PYTHONUNBUFFERED = "1"
+FORENSIC_PROJECT_ROOT = "{{ config_root }}"
+FORENSIC_EVIDENCE_DIR = "{{ config_root }}/evidence"
+FORENSIC_LOG_LEVEL = "DEBUG"
+
+# ── Tasks ────────────────────────────────────
+
+[tasks.install]
+description = "Install all project dependencies"
+run = "pip install -r requirements.txt"
+
+[tasks.dev]
+description = "Install development dependencies"
+run = "pip install -r requirements-dev.txt"
+
+[tasks.test]
+description = "Run test suite with pytest"
+run = "python -m pytest tests/ -v --tb=short"
+
+[tasks.lint]
+description = "Run linting with ruff"
+run = "python -m ruff check ."
+
+[tasks.format]
+description = "Format code with ruff"
+run = "python -m ruff format ."
+
+[tasks.typecheck]
+description = "Run type checking with mypy"
+run = "python -m mypy --strict ."
+
+[tasks.clean]
+description = "Remove build artifacts and caches"
+run = """
+python -c "
+import shutil, pathlib
+for p in ['__pycache__', '.pytest_cache', '.mypy_cache', '.ruff_cache', 'build', 'dist', '*.egg-info']:
+    for match in pathlib.Path('.').rglob(p):
+        print(f'Removing {match}')
+        if match.is_dir():
+            shutil.rmtree(match)
+        else:
+            match.unlink()
+"
+"""
+
+[tasks.build]
+description = "Build standalone executable with PyInstaller"
+run = "python -m PyInstaller --onefile --name android-forensics main.py"
+
+[tasks.hash-verify]
+description = "Verify evidence integrity hashes"
+run = "python -m core.integrity --verify evidence/"

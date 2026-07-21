@@ -1,0 +1,103 @@
+# ──────────────────────────────────────────────
+#  Android Forensic Framework – .gitignore
+# ──────────────────────────────────────────────
+
+.vscode/settings.json
+
+# ── Python ───────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── Virtual Environments ─────────────────────
+.venv/
+venv/
+ENV/
+env/
+.python-version
+
+# ── IDE / Editor ─────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath
+*.sublime-project
+*.sublime-workspace
+
+# ── Testing & Coverage ───────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# ── Type Checking & Linting ──────────────────
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# ── mise ─────────────────────────────────────
+.mise.local.toml
+.mise.*.local.toml
+
+# ── Build & Packaging ───────────────────────
+*.exe
+*.msi
+*.AppImage
+*.dmg
+PyInstaller/
+
+# ── Forensic Evidence (NEVER commit) ────────
+evidence/
+acquisitions/
+dumps/
+raw_images/
+*.dd
+*.img
+*.bin
+*.raw
+*.e01
+*.ex01
+*.aff
+*.aff4
+
+# ── SQLite Artifacts ─────────────────────────
+*.db-wal
+*.db-shm
+*.db-journal
+
+# ── Logs ─────────────────────────────────────
+logs/
+*.log
+
+# ── OS Files ─────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# ── Secrets & Config ────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key

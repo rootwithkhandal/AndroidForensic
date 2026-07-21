@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Forensic Framework │ FAQ & Investigator Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: rgba(19, 26, 42, 0.7);
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #38bdf8;
+            --accent-indigo: #818cf8;
+            --accent-emerald: #34d399;
+            --accent-rose: #f43f5e;
+            --accent-amber: #fbbf24;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 80% 20%, rgba(129, 140, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(56, 189, 248, 0.08) 0%, transparent 40%);
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-main);
+            background: var(--bg-glass);
+            border-color: var(--border-glass);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+        }
+
+        /* Header */
+        .page-header {
+            padding: 140px 5% 60px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+        }
+
+        /* FAQ Container */
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto 100px;
+            padding: 0 5%;
+        }
+
+        .faq-group-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin: 40px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(12px);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .faq-question {
+            padding: 22px 26px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            color: var(--accent-cyan);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--text-muted);
+            padding: 0 26px;
+            font-size: 0.98rem;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 600px;
+            padding: 0 26px 26px;
+        }
+
+        .faq-answer code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--accent-emerald);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .faq-answer ul {
+            margin: 12px 0 12px 24px;
+        }
+
+        .faq-answer li {
+            margin-bottom: 8px;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-glass);
+            background: rgba(11, 15, 25, 0.95);
+            padding: 50px 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">
+            <span>🔍</span> Android Forensic Framework
+        </a>
+        <div class="nav-links">
+            <a href="index.html">🏠 Portal</a>
+            <a href="faq.html" class="active">❓ FAQ & Guide</a>
+            <a href="help.html">🛠️ Helpdesk & CLI</a>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>Frequently Asked Questions & Investigator Guide</h1>
+        <p>Expert answers on non-rooted acquisition methodologies, cryptographic chain of custody, and forensic best practices.</p>
+    </div>
+
+    <div class="faq-container">
+        <!-- Group 1 -->
+        <div class="faq-group-title">📱 Core Acquisition & Root vs Non-Root Constraints</div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>How does the framework extract data from a non-rooted Android device?</span>
+                <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                On non-rooted devices (like Samsung Galaxy A14, Android 15), OS security isolates application databases (`/data/data/com.whatsapp/`, `/data/data/com.android.chrome/`). Our framework bypasses these restrictions non-destructively by:
+                <ul>
+                    <li>Querying public and system **Content Providers** (`content://call_log/calls`, `content://sms`, `content://com.android.contacts/data/phones`, `content://com.android.calendar/`).</li>
+                    <li>Executing deep diagnostic system dumps (`dumpsys location --noredact`, `dumpsys notification --noredact`, `dumpsys usagestats`, `dumpsys wifi`, `dumpsys usb`).</li>
+                    <li>Parsing system kernel logs and event buffers (`logcat -b events -d`) and active socket states (`netstat -ntupa / ss`).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What happens if the Android device has root access (`su`) enabled?</span>
+                <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                Every extraction engine (`extract_journey.py`, `extract_browser_history.py`, `extract_cookies.py`) automatically checks for `su` root access. If detected, the framework seamlessly switches into **Private Filesystem Acquisition Mode**, directly pulling unencrypted SQLite databases (`History`, `Cookies`, `msgstore.db`, `location.db`) directly from `/data/data/<package_name>/`.
+            </div>
+        </div>
+
+        <!-- Group 2 -->
+        <div class="faq-group-title">💬 WhatsApp & Instant Messaging Extraction</div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Why are Gmail and ProtonMail folders empty when inspecting `/sdcard/Android/data/`?</span>
+                <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                Modern mail applications (`com.google.android.gm`, `ch.protonmail.android`) do not store sensitive email bodies or attachments on external SD card storage (`/sdcard/`). They store encrypted SQLite databases strictly inside `/data/data/<package_name>/databases/`. For non-rooted acquisitions, investigators extract cloud backups or capture active notification text via our `--notifications` module.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>How does the WhatsApp Companion Web sync extraction work?</span>
+                <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                By leveraging WhatsApp's multi-device companion feature, investigators can link our framework's `whatsapp_companion.py` module as a linked web browser session via QR code. Once authorized, our engine syncs full historical message archives, contact JID profiles, and shared location pins directly to `evidence/CASE-*/parsed/whatsapp_companion_raw.json` without requiring root access on the phone.
+            </div>
+        </div>
+
+        <!-- Group 3 -->
+        <div class="faq-group-title">🔒 Chain of Custody & Cryptographic Verification</div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>How does the framework guarantee cryptographic integrity for court verification?</span>
+                <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                The moment any file, diagnostic dump, or database is extracted from the device, our `IntegrityEngine` immediately calculates both **SHA-256** and **MD5** cryptographic hashes before any modification can occur. These hashes, along with precise acquisition timestamps and investigator details, are written to `hash_manifest.json` and `hash_manifest.csv` to ensure a verifiable chain of custody.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Can I import external Google Takeout or synced databases into an active case?</span>
+                <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+                Yes! If you acquire a user's Google Takeout (`Timeline.json`, `Chrome History.json`) or PC-synced `Places.sqlite` file, simply drop it into your case's `evidence/` directory. When you run `--journey` or `--browser-history`, our engines automatically scan, ingest, and merge those external records right alongside the live device evidence.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>🛡️ Android Forensic Framework — Built for Verifiable, Court-Ready Mobile Digital Evidence Acquisition.</p>
+        <div class="footer-links">
+            <a href="index.html">Portal Home</a>
+            <a href="faq.html">FAQ & Guide</a>
+            <a href="help.html">Command Reference</a>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(el) {
+            const item = el.parentElement;
+            item.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
