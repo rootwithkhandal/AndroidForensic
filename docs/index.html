@@ -428,8 +428,8 @@
 
     <section class="hero">
         <div class="badge">⚡ Court-Ready Forensic Suite v1.5</div>
-        <h1>Next-Generation Mobile Acquisition & Artifact Intelligence</h1>
-        <p>Comprehensive open-source suite for acquiring, decoding, and mapping high-value forensic artifacts from Android devices with dual cryptographic chain of custody.</p>
+        <h1>Authorized Android Artifact Collection</h1>
+        <p>An ADB-based MVP for collecting accessible artifacts, recording acquisition metadata, and producing hash manifests. Validate every result independently.</p>
         
         <div class="cta-buttons">
             <a href="#modules" class="btn btn-primary">⚡ Explore 11 Modules</a>
@@ -449,7 +449,7 @@
         </div>
         <div class="terminal-body">
             <div>
-                <span class="command-text">python</span> capture/prototype.py 
+                <span class="command-text">python -m</span> capture
                 <span class="command-flag">--call-logs --messages --contacts --connectivity --notifications --calendar --journey --network --browser-history --cookies --device-events --connected-devices</span>
             </div>
             <button class="copy-btn" onclick="copyCommand(this)">📋 Copy Command</button>
@@ -458,7 +458,7 @@
 
     <div class="section-header" id="modules">
         <h2>Acquisition Modules & Artifact Engines</h2>
-        <p>Every module executes non-destructively over ADB, automatically creating SQLite tables, CSV spreadsheets, JSON records, and visual analytical maps.</p>
+        <p>Modules attempt collection through ADB and can be limited by device permissions, Android release, OEM behavior, and available data. Review raw output and errors.</p>
     </div>
 
     <div class="modules-grid">
@@ -610,7 +610,7 @@
             <div>
                 <div class="card-icon">🔒</div>
                 <div class="card-title">Cryptographic Integrity</div>
-                <div class="card-desc">Computes SHA-256 and MD5 cryptographic hashes for every single acquired file, saving verifiable manifests (`hash_manifest.json/.csv`) and HTML court-ready summaries.</div>
+                <div class="card-desc">Computes SHA-256 and MD5 hashes for registered evidence files and saves manifests (`hash_manifest.json/.csv`) with HTML and JSON summaries.</div>
             </div>
             <div class="card-footer">
                 <span class="flag-tag">Automatic</span>
@@ -631,7 +631,7 @@
 
     <script>
         function copyCommand(btn) {
-            const cmd = "python capture/prototype.py --call-logs --messages --contacts --connectivity --notifications --calendar --journey --network --browser-history --cookies --device-events --connected-devices";
+            const cmd = "python -m capture --serial DEVICE_SERIAL --call-logs --messages --contacts --connectivity --notifications --calendar --journey --network --browser-history --cookies --device-events --connected-devices";
             navigator.clipboard.writeText(cmd).then(() => {
                 const originalText = btn.innerText;
                 btn.innerText = "✅ Copied to Clipboard!";

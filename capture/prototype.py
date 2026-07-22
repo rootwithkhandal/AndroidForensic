@@ -204,6 +204,14 @@ LOG_FORMAT = "%(asctime)s │ %(levelname)-8s │ %(message)s"
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
+def configure_console_output() -> None:
+    """Use UTF-8 when the host console supports stream reconfiguration."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure:
+            reconfigure(encoding="utf-8", errors="replace")
+
+
 def setup_logging(log_dir: Path, level: str = "DEBUG") -> logging.Logger:
     """Configure console + file logging."""
     logger = logging.getLogger(TOOL_NAME)
@@ -1482,6 +1490,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     """Main entry point."""
+    configure_console_output()
     print_banner()
     args = parse_args()
 
@@ -1657,7 +1666,7 @@ def main() -> int:
                 from extract_call_logs import CallLogExtractor
 
             call_logs_output = repo.root / "parsed" / "call_logs"
-            extractor = CallLogExtractor(output_dir=call_logs_output)
+            extractor = CallLogExtractor(output_dir=call_logs_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in call_logs_output.glob("*.db"):
                 if db_file.exists():
@@ -1693,7 +1702,7 @@ def main() -> int:
                 from extract_messages import MessagesExtractor
 
             messages_output = repo.root / "parsed" / "messages"
-            extractor = MessagesExtractor(output_dir=messages_output)
+            extractor = MessagesExtractor(output_dir=messages_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all(run_whatsapp_companion=args.whatsapp_companion)
             for db_file in messages_output.glob("*.db"):
                 if db_file.exists():
@@ -1729,7 +1738,7 @@ def main() -> int:
                 from extract_contacts import ContactsExtractor
 
             contacts_output = repo.root / "parsed" / "contacts"
-            extractor = ContactsExtractor(output_dir=contacts_output)
+            extractor = ContactsExtractor(output_dir=contacts_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in contacts_output.glob("*.db"):
                 if db_file.exists():
@@ -1765,7 +1774,7 @@ def main() -> int:
                 from extract_connectivity import ConnectivityExtractor
 
             conn_output = repo.root / "parsed" / "connectivity"
-            extractor = ConnectivityExtractor(output_dir=conn_output)
+            extractor = ConnectivityExtractor(output_dir=conn_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in conn_output.glob("*.db"):
                 if db_file.exists():
@@ -1801,7 +1810,7 @@ def main() -> int:
                 from extract_notifications import NotificationsExtractor
 
             notif_output = repo.root / "parsed" / "notifications"
-            extractor = NotificationsExtractor(output_dir=notif_output)
+            extractor = NotificationsExtractor(output_dir=notif_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in notif_output.glob("*.db"):
                 if db_file.exists():
@@ -1837,7 +1846,7 @@ def main() -> int:
                 from extract_calendar import CalendarExtractor
 
             cal_output = repo.root / "parsed" / "calendar"
-            extractor = CalendarExtractor(output_dir=cal_output)
+            extractor = CalendarExtractor(output_dir=cal_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in cal_output.glob("*.db"):
                 if db_file.exists():
@@ -1873,7 +1882,7 @@ def main() -> int:
                 from extract_journey import JourneyExtractor
 
             journey_output = repo.root / "parsed" / "journey"
-            extractor = JourneyExtractor(output_dir=journey_output)
+            extractor = JourneyExtractor(output_dir=journey_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for ext_file in list(journey_output.glob("*.db")) + list(journey_output.glob("*.html")) + list(journey_output.glob("*.kml")):
                 if ext_file.exists():
@@ -1909,7 +1918,7 @@ def main() -> int:
                 from extract_network import NetworkExtractor
 
             net_output = repo.root / "parsed" / "network"
-            extractor = NetworkExtractor(output_dir=net_output)
+            extractor = NetworkExtractor(output_dir=net_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in net_output.glob("*.db"):
                 if db_file.exists():
@@ -1945,7 +1954,7 @@ def main() -> int:
                 from extract_browser_history import BrowserExtractor
 
             browser_output = repo.root / "parsed" / "browsers"
-            extractor = BrowserExtractor(output_dir=browser_output)
+            extractor = BrowserExtractor(output_dir=browser_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in browser_output.glob("*.db"):
                 if db_file.exists():
@@ -1981,7 +1990,7 @@ def main() -> int:
                 from extract_cookies import CookiesExtractor
 
             cookies_output = repo.root / "parsed" / "cookies"
-            extractor = CookiesExtractor(output_dir=cookies_output)
+            extractor = CookiesExtractor(output_dir=cookies_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in list(cookies_output.glob("*.db")) + list(cookies_output.glob("*.txt")):
                 if db_file.exists():
@@ -2017,7 +2026,7 @@ def main() -> int:
                 from extract_device_events import EventsExtractor
 
             events_output = repo.root / "parsed" / "events"
-            extractor = EventsExtractor(output_dir=events_output)
+            extractor = EventsExtractor(output_dir=events_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in events_output.glob("*.db"):
                 if db_file.exists():
@@ -2053,7 +2062,7 @@ def main() -> int:
                 from extract_connected_devices import ConnectedDevicesExtractor
 
             conn_output = repo.root / "parsed" / "connected_devices"
-            extractor = ConnectedDevicesExtractor(output_dir=conn_output)
+            extractor = ConnectedDevicesExtractor(output_dir=conn_output, adb_path=Path(adb.adb_path), serial=adb.serial)
             res = extractor.extract_all()
             for db_file in conn_output.glob("*.db"):
                 if db_file.exists():

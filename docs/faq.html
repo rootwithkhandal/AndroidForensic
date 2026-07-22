@@ -258,7 +258,7 @@
                 <span class="faq-icon">▼</span>
             </div>
             <div class="faq-answer">
-                On non-rooted devices (like Samsung Galaxy A14, Android 15), OS security isolates application databases (`/data/data/com.whatsapp/`, `/data/data/com.android.chrome/`). Our framework bypasses these restrictions non-destructively by:
+                On non-rooted devices, Android security isolates private application databases (`/data/data/...`). The MVP does not bypass these restrictions. Where Android permits it, the tool can query exposed content providers and collect diagnostic output; availability varies by device and release.
                 <ul>
                     <li>Querying public and system **Content Providers** (`content://call_log/calls`, `content://sms`, `content://com.android.contacts/data/phones`, `content://com.android.calendar/`).</li>
                     <li>Executing deep diagnostic system dumps (`dumpsys location --noredact`, `dumpsys notification --noredact`, `dumpsys usagestats`, `dumpsys wifi`, `dumpsys usb`).</li>
@@ -273,7 +273,7 @@
                 <span class="faq-icon">▼</span>
             </div>
             <div class="faq-answer">
-                Every extraction engine (`extract_journey.py`, `extract_browser_history.py`, `extract_cookies.py`) automatically checks for `su` root access. If detected, the framework seamlessly switches into **Private Filesystem Acquisition Mode**, directly pulling unencrypted SQLite databases (`History`, `Cookies`, `msgstore.db`, `location.db`) directly from `/data/data/<package_name>/`.
+                Some acquisition paths may use `su` when it is already available and authorized on the device. Root access does not guarantee that every database is accessible or unencrypted, and it does not make this MVP a full filesystem or physical-acquisition tool.
             </div>
         </div>
 
@@ -309,7 +309,7 @@
                 <span class="faq-icon">▼</span>
             </div>
             <div class="faq-answer">
-                The moment any file, diagnostic dump, or database is extracted from the device, our `IntegrityEngine` immediately calculates both **SHA-256** and **MD5** cryptographic hashes before any modification can occur. These hashes, along with precise acquisition timestamps and investigator details, are written to `hash_manifest.json` and `hash_manifest.csv` to ensure a verifiable chain of custody.
+                Registered evidence files are recorded with SHA-256 and MD5 values, timestamps, paths, and source metadata in the case folder. These manifests support traceability; they do not by themselves guarantee legal chain of custody or forensic validity.
             </div>
         </div>
 

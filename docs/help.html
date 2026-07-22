@@ -341,7 +341,7 @@
             <div class="chip" onclick="toggleChip(this, '--skip-apk')">--skip-apk</div>
         </div>
         <div class="preview-box">
-            <span id="cmdPreview">python capture/prototype.py --call-logs --messages --contacts --connectivity --notifications --calendar --journey --network --browser-history --cookies --device-events --connected-devices</span>
+            <span id="cmdPreview">python -m capture --serial DEVICE_SERIAL --call-logs --messages --contacts --connectivity --notifications --calendar --journey --network --browser-history --cookies --device-events --connected-devices</span>
             <button class="copy-btn" onclick="copyGenerated()">📋 Copy Command</button>
         </div>
     </div>
@@ -411,7 +411,7 @@
                 </tr>
                 <tr>
                     <td><span class="flag-code">--dry-run</span></td>
-                    <td>Simulates acquisition over ADB without pulling actual files or saving databases.</td>
+                    <td>Shows default logical-acquisition paths without pulling files. Optional extractors are not run in dry-run mode.</td>
                 </tr>
                 <tr>
                     <td><span class="flag-code">--skip-media</span></td>
@@ -462,7 +462,7 @@
             const activeChips = document.querySelectorAll('.chip.active');
             let flags = [];
             activeChips.forEach(c => flags.push(c.innerText));
-            const cmdStr = "python capture/prototype.py " + flags.join(' ');
+            const cmdStr = "python -m capture --serial DEVICE_SERIAL " + flags.join(' ');
             document.getElementById('cmdPreview').innerText = cmdStr;
         }
 

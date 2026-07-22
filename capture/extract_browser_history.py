@@ -69,7 +69,7 @@ class BrowserExtractor:
         }
     }
 
-    def __init__(self, output_dir: Path, adb_path: Path = None):
+    def __init__(self, output_dir: Path, adb_path: Path = None, serial: str | None = None):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.raw_dir = self.output_dir / "raw"
@@ -77,6 +77,7 @@ class BrowserExtractor:
         self.parsed_dir = self.output_dir / "parsed"
         self.parsed_dir.mkdir(parents=True, exist_ok=True)
         self.adb_path = adb_path or self._find_adb()
+        self.serial = serial
 
     def _find_adb(self) -> Path:
         local_adb = project_root / "capture" / "components" / "adb-tools" / "windows" / "platform-tools" / "adb.exe"
@@ -85,7 +86,7 @@ class BrowserExtractor:
         return Path("adb")
 
     def _run_adb(self, args: list[str]) -> tuple[int, str, str]:
-        cmd = [str(self.adb_path)] + args
+        cmd = [str(self.adb_path), *( ["-s", self.serial] if self.serial else [] ), *args]
         try:
             res = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
             return res.returncode, res.stdout, res.stderr
